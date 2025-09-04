@@ -5,7 +5,7 @@ import { useState, useRef, useReducer } from "react"
 export default function Home() {
   // track who's turn it is
   const [ player, setPlayer ] = useState(1)
-  const [ winner, setWinner ] = useState(false)
+  const [ winner, setWinner ] = useState(0)
   const [ score, setScore ] = useState({
     p1: 0,
     p2: 0
@@ -110,7 +110,7 @@ export default function Home() {
       p2: []
     }
     setPlayer(1)
-    setWinner(false)
+    setWinner(0)
   }
 
   const checkWin = (player) => {
@@ -156,7 +156,7 @@ export default function Home() {
                 null
             }
           })
-          setWinner(true)
+          setWinner(1)
           setScore(score => ({...score, p1: score.p1++}))
           break
         }
@@ -203,7 +203,7 @@ export default function Home() {
                 null
             }
           })
-          setWinner(true)
+          setWinner(2)
           setScore(score => ({...score, p2: score.p2++}))
           break
         }
@@ -215,7 +215,7 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <h1>TIC TAC TOE</h1>
-        <p>{winner ? `PLAYER ${player === 1 ? '2' : '1'} WINS!` : `Player ${player}'s turn`}</p>
+        <p className={winner === 1 ? styles.textRed : winner === 2 ? styles.textBlue : null}>{winner !== 0 ? `PLAYER ${winner} WINS!` : `Player ${player}'s turn`}</p>
         <div className={styles.game}>
           <div className={styles.gameGrid}>
             <div id='dot0' className={selectedClass.current[0]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
@@ -233,12 +233,12 @@ export default function Home() {
           <h2>SCORE</h2>
           <div className={styles.scoreSection}>
             <div className={styles.score}>
-              <p>Player 1</p>
-              <p>{score.p1}</p>
+              <p className={styles.textRed}>Player 1</p>
+              <p className={styles.textRed}>{score.p1}</p>
             </div>
             <div className={styles.score}>
-              <p>Player 2</p>
-              <p>{score.p2}</p>
+              <p className={styles.textBlue}>Player 2</p>
+              <p className={styles.textBlue}>{score.p2}</p>
             </div>
           </div>
           <button className={styles.reset} onClick={newGame}>New Game</button>
