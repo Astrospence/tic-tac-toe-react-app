@@ -1,6 +1,6 @@
 'use client'
 import styles from "./page.module.css";
-import { useState, useRef, useReducer } from "react"
+import { useState, useRef } from "react"
 
 export default function Home() {
   // track who's turn it is
@@ -27,8 +27,6 @@ export default function Home() {
     p1: [],
     p2: []
   })
-  // manually re-render
-  const [ , forceRender ] = useReducer(x => x++)
 
   // possible win scenarios
   const winCon = [
