@@ -78,6 +78,41 @@
   transform: scale(1.1);
 }
 
+.p1Winner {
+  background-color: red;
+  pointer-events: none;
+  border-radius: 50px;
+  width: 100px;
+  height: 100px;
+  padding: 5px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+  transform: scale(1.1);
+  animation: winner 0.3s linear infinite alternate;
+}
+
+.p2Winner {
+  background-color: blue;
+  pointer-events: none;
+  border-radius: 50px;
+  width: 100px;
+  height: 100px;
+  padding: 5px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s;
+  transform: scale(1.1);
+  animation: winner 0.3s linear infinite alternate;
+}
+
+@keyframes winner {
+  from { transform: scale(1.1) }
+  to { transform: scale(1.2) }
+}
+
 .scoreBoard {
   border: 1px solid green;
   text-align: center;

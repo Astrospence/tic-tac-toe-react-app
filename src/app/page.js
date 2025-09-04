@@ -1,10 +1,12 @@
 'use client'
 import styles from "./page.module.css";
-import { useState, useEffect } from "react"
+import { useState, useRef } from "react"
 
 export default function Home() {
+  // track who's turn it is
   const [ player, setPlayer ] = useState(1)
-  const [ selectedClass, setSelectedClass ] = useState({
+  // control styles of selected dots
+  const selectedClass = useRef({
     0: styles.gameDot,
     1: styles.gameDot,
     2: styles.gameDot,
@@ -15,12 +17,13 @@ export default function Home() {
     7: styles.gameDot,
     8: styles.gameDot
   })
-  const [ tally, setTally ] = useState({
+  // store players' selected dots
+  const tally = useRef({
     p1: [],
     p2: []
   })
-  const [ winner, setWinner ] = useState(0)
 
+  // possible win scenarios
   const winCon = [
     [0, 1, 2],
     [3, 4, 5],
@@ -35,37 +38,39 @@ export default function Home() {
   const select = (e) => {
     e.preventDefault()
     const target = parseInt(e.target.id.slice(e.target.id.length - 1))
-    player === 1 ? setTally(tally => ({...tally, p1: [...tally.p1, target]})) : setTally(tally => ({...tally, p2: [...tally.p2, target]}))
+    // keep tally of selected dot
+    player === 1 ? tally.current = ({...tally.current, p1: [...tally.current.p1, target]}) : tally.current = ({...tally.current, p2: [...tally.current.p2, target]})
+    // update class of selected dot
     switch (target) {
       case 0:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 0: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 0: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 0: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 0: styles.p2Selected})
         break;
       case 1:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 1: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 1: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 1: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 1: styles.p2Selected})
         break;
       case 2:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 2: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 2: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 2: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 2: styles.p2Selected})
         break;
       case 3:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 3: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 3: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 3: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 3: styles.p2Selected})
         break;
       case 4:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 4: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 4: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 4: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 4: styles.p2Selected})
         break;
       case 5:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 5: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 5: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 5: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 5: styles.p2Selected})
         break;
       case 6:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 6: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 6: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 6: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 6: styles.p2Selected})
         break;
       case 7:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 7: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 7: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 7: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 7: styles.p2Selected})
         break;
       case 8:
-        player === 1 ? setSelectedClass(selectedClass => ({...selectedClass, 8: styles.p1Selected})) : setSelectedClass(selectedClass => ({...selectedClass, 8: styles.p2Selected}))
+        player === 1 ? selectedClass.current = ({...selectedClass.current, 8: styles.p1Selected}) : selectedClass.current = ({...selectedClass.current, 8: styles.p2Selected})
         break;
       default:
-        setSelectedClass({
+        selectedClass.current = ({
           0: styles.gameDot,
           1: styles.gameDot,
           2: styles.gameDot,
@@ -77,11 +82,13 @@ export default function Home() {
           8: styles.gameDot
         })
     }
+    // switch player turn
     player === 1 ? setPlayer(2) : setPlayer(1)
+    checkWin(player)
   }
 
   const newGame = () => {
-    setSelectedClass({
+    selectedClass.current = ({
           0: styles.gameDot,
           1: styles.gameDot,
           2: styles.gameDot,
@@ -95,40 +102,98 @@ export default function Home() {
   }
 
   const checkWin = (player) => {
-    let p1win = false
-    let p2win = false
-    for (let i = 0; i < winCon.length; i++) {
-      let count = 0
-      for (let n = 0; n < tally.p1.length; n++) {
-        if ((tally.p1[n] === winCon[i][0]) || (tally.p1[n] === winCon[i][1]) || (tally.p1[n] === winCon[i][2])) {
-          count++
+    if (player === 1) {
+      for (let i = 0; i < winCon.length; i++) {
+        let count = 0
+        for (let n = 0; n < tally.current.p1.length; n++) {
+          if ((tally.current.p1[n] === winCon[i][0]) || (tally.current.p1[n] === winCon[i][1]) || (tally.current.p1[n] === winCon[i][2])) {
+            count++
+          }
+        }
+        if (count > 2) {
+          winCon[i].forEach(dot => {
+            switch (dot) {
+              case 0:
+                selectedClass.current = ({...selectedClass.current, 0: styles.p1Winner})
+                break;
+              case 1:
+                selectedClass.current = ({...selectedClass.current, 1: styles.p1Winner})
+                break;
+              case 2:
+                selectedClass.current = ({...selectedClass.current, 2: styles.p1Winner})
+                break;
+              case 3:
+                selectedClass.current = ({...selectedClass.current, 3: styles.p1Winner})
+                break;
+              case 4:
+                selectedClass.current = ({...selectedClass.current, 4: styles.p1Winner})
+                break;
+              case 5:
+                selectedClass.current = ({...selectedClass.current, 5: styles.p1Winner})
+                break;
+              case 6:
+                selectedClass.current = ({...selectedClass.current, 6: styles.p1Winner})
+                break;
+              case 7:
+                selectedClass.current = ({...selectedClass.current, 7: styles.p1Winner})
+                break;
+              case 8:
+                selectedClass.current = ({...selectedClass.current, 8: styles.p1Winner})
+                break;
+              default:
+                null
+            }
+          })
+          break
         }
       }
-      if (count > 2) {
-        p1win = true
-        break
-      }
-    }
-    for (let i = 0; i < winCon.length; i++) {
-      let count = 0
-      for (let n = 0; n < tally.p2.length; n++) {
-        if ((tally.p2[n] === winCon[i][0]) || (tally.p2[n] === winCon[i][1]) || (tally.p2[n] === winCon[i][2])) {
-          count++
+    } else {
+      for (let i = 0; i < winCon.length; i++) {
+        let count = 0
+        for (let n = 0; n < tally.current.p2.length; n++) {
+          if ((tally.current.p2[n] === winCon[i][0]) || (tally.current.p2[n] === winCon[i][1]) || (tally.current.p2[n] === winCon[i][2])) {
+            count++
+          }
+        }
+        if (count > 2) {
+          winCon[i].forEach(dot => {
+            switch (dot) {
+              case 0:
+                selectedClass.current = ({...selectedClass.current, 0: styles.p2Winner})
+                break;
+              case 1:
+                selectedClass.current = ({...selectedClass.current, 1: styles.p2Winner})
+                break;
+              case 2:
+                selectedClass.current = ({...selectedClass.current, 2: styles.p2Winner})
+                break;
+              case 3:
+                selectedClass.current = ({...selectedClass.current, 3: styles.p2Winner})
+                break;
+              case 4:
+                selectedClass.current = ({...selectedClass.current, 4: styles.p2Winner})
+                break;
+              case 5:
+                selectedClass.current = ({...selectedClass.current, 5: styles.p2Winner})
+                break;
+              case 6:
+                selectedClass.current = ({...selectedClass.current, 6: styles.p2Winner})
+                break;
+              case 7:
+                selectedClass.current = ({...selectedClass.current, 7: styles.p2Winner})
+                break;
+              case 8:
+                selectedClass.current = ({...selectedClass.current, 8: styles.p2Winner})
+                break;
+              default:
+                null
+            }
+          })
+          break
         }
       }
-      if (count > 2) {
-        p2win = true
-        break
-      }
-    }
-    if (p1win) {
-      console.log('p1 wins!')
-    } else if (p2win) {
-      console.log('p2 wins!')
     }
   }
-
-  checkWin(player)
 
   return (
     <div className={styles.page}>
@@ -137,15 +202,15 @@ export default function Home() {
         <p>{`Player ${player}'s turn!`}</p>
         <div className={styles.game}>
           <div className={styles.gameGrid}>
-            <div id='dot0' className={selectedClass[0]} onClick={select}></div>
-            <div id='dot1' className={selectedClass[1]} onClick={select}></div>
-            <div id='dot2' className={selectedClass[2]} onClick={select}></div>
-            <div id='dot3' className={selectedClass[3]} onClick={select}></div>
-            <div id='dot4' className={selectedClass[4]} onClick={select}></div>
-            <div id='dot5' className={selectedClass[5]} onClick={select}></div>
-            <div id='dot6' className={selectedClass[6]} onClick={select}></div>
-            <div id='dot7' className={selectedClass[7]} onClick={select}></div>
-            <div id='dot8' className={selectedClass[8]} onClick={select}></div>
+            <div id='dot0' className={selectedClass.current[0]} onClick={select}></div>
+            <div id='dot1' className={selectedClass.current[1]} onClick={select}></div>
+            <div id='dot2' className={selectedClass.current[2]} onClick={select}></div>
+            <div id='dot3' className={selectedClass.current[3]} onClick={select}></div>
+            <div id='dot4' className={selectedClass.current[4]} onClick={select}></div>
+            <div id='dot5' className={selectedClass.current[5]} onClick={select}></div>
+            <div id='dot6' className={selectedClass.current[6]} onClick={select}></div>
+            <div id='dot7' className={selectedClass.current[7]} onClick={select}></div>
+            <div id='dot8' className={selectedClass.current[8]} onClick={select}></div>
           </div>
         </div>
         <div className={styles.scoreBoard}>
