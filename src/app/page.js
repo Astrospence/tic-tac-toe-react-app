@@ -228,17 +228,20 @@ export default function Home() {
           </div>
         </div>
         <div className={styles.scoreBoard}>
-          <h2>SCORE</h2>
-          <div className={styles.scoreSection}>
-            <div className={styles.score}>
-              <p className={styles.textRed}>Player 1</p>
-              <p className={styles.textRed}>{score.p1}</p>
+          {/*
+            <h2>SCORE</h2>
+            <div className={styles.scoreSection}>
+              <div className={styles.score}>
+                <p className={styles.textRed}>Player 1</p>
+                <p className={styles.textRed}>{score.p1}</p>
+              </div>
+              <div className={styles.score}>
+                <p className={styles.textBlue}>Player 2</p>
+                <p className={styles.textBlue}>{score.p2}</p>
+              </div>
             </div>
-            <div className={styles.score}>
-              <p className={styles.textBlue}>Player 2</p>
-              <p className={styles.textBlue}>{score.p2}</p>
-            </div>
-          </div>
+          */}
+          
           <button className={styles.reset} onClick={newGame}>New Game</button>
         </div>
       </main>

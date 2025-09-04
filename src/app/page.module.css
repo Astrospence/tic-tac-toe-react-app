@@ -120,10 +120,12 @@
 .scoreBoard {
   border-radius: 15px;
   text-align: center;
-  padding: 20px;
+  padding: 20px 40px;
   background-color: rgb(25, 25, 34);
   display: grid;
   gap: 15px;
+  width: max-content;
+  margin: auto;
 }
 
 .scoreSection {
