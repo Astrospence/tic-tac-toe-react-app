@@ -6,6 +6,10 @@ export default function Home() {
   // track who's turn it is
   const [ player, setPlayer ] = useState(1)
   const [ winner, setWinner ] = useState(false)
+  const [ score, setScore ] = useState({
+    p1: 0,
+    p2: 0
+  })
   // control styles of selected dots
   const selectedClass = useRef({
     0: styles.gameDot,
@@ -101,7 +105,12 @@ export default function Home() {
       7: styles.gameDot,
       8: styles.gameDot
     })
-    forceRender()
+    tally.current = {
+      p1: [],
+      p2: []
+    }
+    setPlayer(1)
+    setWinner(false)
   }
 
   const checkWin = (player) => {
@@ -148,6 +157,7 @@ export default function Home() {
             }
           })
           setWinner(true)
+          setScore(score => ({...score, p1: score.p1++}))
           break
         }
       }
@@ -194,6 +204,7 @@ export default function Home() {
             }
           })
           setWinner(true)
+          setScore(score => ({...score, p2: score.p2++}))
           break
         }
       }
@@ -223,11 +234,11 @@ export default function Home() {
           <div className={styles.scoreSection}>
             <div className={styles.score}>
               <p>Player 1</p>
-              <p>0</p>
+              <p>{score.p1}</p>
             </div>
             <div className={styles.score}>
               <p>Player 2</p>
-              <p>0</p>
+              <p>{score.p2}</p>
             </div>
           </div>
           <button className={styles.reset} onClick={newGame}>New Game</button>
