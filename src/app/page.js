@@ -1,10 +1,11 @@
 'use client'
 import styles from "./page.module.css";
-import { useState, useRef } from "react"
+import { useState, useRef, useReducer } from "react"
 
 export default function Home() {
   // track who's turn it is
   const [ player, setPlayer ] = useState(1)
+  const [ winner, setWinner ] = useState(false)
   // control styles of selected dots
   const selectedClass = useRef({
     0: styles.gameDot,
@@ -22,6 +23,8 @@ export default function Home() {
     p1: [],
     p2: []
   })
+  // manually re-render
+  const [ , forceRender ] = useReducer(x => x++)
 
   // possible win scenarios
   const winCon = [
@@ -82,23 +85,23 @@ export default function Home() {
           8: styles.gameDot
         })
     }
-    // switch player turn
+    checkWin(player)    
     player === 1 ? setPlayer(2) : setPlayer(1)
-    checkWin(player)
   }
 
   const newGame = () => {
     selectedClass.current = ({
-          0: styles.gameDot,
-          1: styles.gameDot,
-          2: styles.gameDot,
-          3: styles.gameDot,
-          4: styles.gameDot,
-          5: styles.gameDot,
-          6: styles.gameDot,
-          7: styles.gameDot,
-          8: styles.gameDot
-        })
+      0: styles.gameDot,
+      1: styles.gameDot,
+      2: styles.gameDot,
+      3: styles.gameDot,
+      4: styles.gameDot,
+      5: styles.gameDot,
+      6: styles.gameDot,
+      7: styles.gameDot,
+      8: styles.gameDot
+    })
+    forceRender()
   }
 
   const checkWin = (player) => {
@@ -144,6 +147,7 @@ export default function Home() {
                 null
             }
           })
+          setWinner(true)
           break
         }
       }
@@ -189,6 +193,7 @@ export default function Home() {
                 null
             }
           })
+          setWinner(true)
           break
         }
       }
@@ -199,18 +204,18 @@ export default function Home() {
     <div className={styles.page}>
       <main className={styles.main}>
         <h1>TIC TAC TOE</h1>
-        <p>{`Player ${player}'s turn!`}</p>
+        <p>{winner ? `PLAYER ${player === 1 ? '2' : '1'} WINS!` : `Player ${player}'s turn`}</p>
         <div className={styles.game}>
           <div className={styles.gameGrid}>
-            <div id='dot0' className={selectedClass.current[0]} onClick={select}></div>
-            <div id='dot1' className={selectedClass.current[1]} onClick={select}></div>
-            <div id='dot2' className={selectedClass.current[2]} onClick={select}></div>
-            <div id='dot3' className={selectedClass.current[3]} onClick={select}></div>
-            <div id='dot4' className={selectedClass.current[4]} onClick={select}></div>
-            <div id='dot5' className={selectedClass.current[5]} onClick={select}></div>
-            <div id='dot6' className={selectedClass.current[6]} onClick={select}></div>
-            <div id='dot7' className={selectedClass.current[7]} onClick={select}></div>
-            <div id='dot8' className={selectedClass.current[8]} onClick={select}></div>
+            <div id='dot0' className={selectedClass.current[0]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot1' className={selectedClass.current[1]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot2' className={selectedClass.current[2]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot3' className={selectedClass.current[3]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot4' className={selectedClass.current[4]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot5' className={selectedClass.current[5]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot6' className={selectedClass.current[6]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot7' className={selectedClass.current[7]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
+            <div id='dot8' className={selectedClass.current[8]} onClick={select} style={winner ? {pointerEvents: 'none'} : {}}></div>
           </div>
         </div>
         <div className={styles.scoreBoard}>
